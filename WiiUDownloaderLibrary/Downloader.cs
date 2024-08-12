@@ -53,10 +53,8 @@ namespace WiiUDownloaderLibrary
         {
             try
             {
-                using (var fs = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None, 4096, useAsync: true))
-                {
-                    await fs.WriteAsync(data, 0, data.Length).ConfigureAwait(false);
-                }
+                using var fs = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None, 4096, useAsync: true);
+                await fs.WriteAsync(data, 0, data.Length).ConfigureAwait(false);
             }
             catch (IOException ioe)
             {
@@ -97,9 +95,7 @@ namespace WiiUDownloaderLibrary
                     ticket = GetTicket(cetk);
                 }
                 else
-                {
                     ticket = GetTicket(td, tmd.GetTitleVersion());
-                }
 
                 await SaveFileAsync(Path.Combine(saveDir, "title.tik"), ticket.ExportTicketData()).ConfigureAwait(false);
                 await SaveFileAsync(Path.Combine(saveDir, "title.cert"), Utils.GetByteArrayFromHexString(HEXSTRING)).ConfigureAwait(false);
@@ -206,9 +202,7 @@ namespace WiiUDownloaderLibrary
 
             // Calculate total bytes to download
             for (uint i = 0; i < contentCount; i++)
-            {
                 totalBytes += tmd.GetContentSize(i);
-            }
 
             for (uint i = 0; i < contentCount; i++)
             {
