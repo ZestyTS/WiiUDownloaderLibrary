@@ -236,10 +236,16 @@ namespace WiiUDownloaderLibrary
                     var h3Bytes = await httpClient.GetByteArrayAsync(new Uri(baseUrl + cidStr + ".h3")).ConfigureAwait(false);
                     await SaveFileAsync(Path.Combine(saveDir, cidStr.ToUpper() + ".h3"), h3Bytes).ConfigureAwait(false);
                 }
-                catch (HttpRequestException hre) when (hre.StatusCode == HttpStatusCode.NotFound)
+                catch (HttpRequestException hre)
                 {
-                    // Handle case where H3 file does not exist
-                    _logger.LogWarning("{CidStr}.h3 not found, ignoring...", cidStr);
+                    // Since I can't do catch when this is what I'm doing instead.
+                    if (hre.Message.Contains("404"))
+                    {
+                        // Handle case where H3 file does not exist
+                        _logger.LogWarning("{CidStr}.h3 not found, ignoring...", cidStr);
+                    }
+                    else
+                        throw;
                 }
                 catch (Exception ex)
                 {
