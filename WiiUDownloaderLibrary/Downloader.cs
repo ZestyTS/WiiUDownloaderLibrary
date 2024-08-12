@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using WiiUDownloaderLibrary.Helpers;
 using WiiUDownloaderLibrary.Models;
+using WiiUDownloaderLibrary.Models.DefaultInjectors;
 
 namespace WiiUDownloaderLibrary
 {
@@ -27,8 +28,8 @@ namespace WiiUDownloaderLibrary
 
         public Downloader(IHttpClientFactory httpClientFactory, ILogger<Downloader> logger)
         {
-            _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _httpClientFactory = httpClientFactory ?? new DefaultHttpClientFactory();
+            _logger = logger ?? new DefaultLogger();
         }
 
         private static readonly Dictionary<string, string> TitleTypeMap = new Dictionary<string, string>
