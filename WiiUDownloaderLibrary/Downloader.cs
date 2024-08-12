@@ -52,7 +52,10 @@ namespace WiiUDownloaderLibrary
         {
             try
             {
-                await File.WriteAllBytesAsync(filePath, data);
+                using (var fs = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None, 4096, useAsync: true))
+                {
+                    await fs.WriteAsync(data, 0, data.Length).ConfigureAwait(false);
+                }
             }
             catch (IOException ioe)
             {
